@@ -139,6 +139,6 @@ The project is organized following best practices for scalable backend applicati
     - CI/CD: Set up continuous integration (e.g., GitHub Actions) for automated testing and deployment.
     - Enhanced API Documentation: Integrate Swagger or similar tools for interactive API documentation.
 
-## Contact Details
+## Contact
 
     For any inquiries or suggestions, please reach out via prakhar2001porwal@gmail.com
