@@ -42,6 +42,6 @@ app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-// app.use(errorHandler)
+app.use(errorHandler)
 
 export { app };
