@@ -1,4 +1,7 @@
+// src/pages/Dashboard.jsx
+
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../utils/axios";
 
 export default function Dashboard() {
@@ -12,6 +15,7 @@ export default function Dashboard() {
       try {
         const userRes  = await api.get("/users/current-user");
         setUser(userRes.data.data);
+
         const statsRes = await api.get("/dashboard/stats");
         setStats(statsRes.data.data);
       } catch (err) {
@@ -24,7 +28,10 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (loading)
+  const AVATAR_SIZE   = 120;  // px
+  const BANNER_HEIGHT = 200;  // px
+
+  if (loading) {
     return (
       <div className="d-flex vh-100 justify-content-center align-items-center">
         <div className="spinner-border text-primary" role="status">
@@ -32,21 +39,20 @@ export default function Dashboard() {
         </div>
       </div>
     );
-  if (error)
+  }
+
+  if (error) {
     return (
       <div className="container py-5">
         <div className="alert alert-danger">{error}</div>
       </div>
     );
-
-  const AVATAR_SIZE = 120;      // px
-  const BANNER_HEIGHT = 200;    // px
+  }
 
   return (
     <div className="container py-5">
-      {/* cover + avatar wrapper */}
+      {/* COVER IMAGE BANNER */}
       <div style={{ position: "relative", marginBottom: AVATAR_SIZE / 2 }}>
-        {/* cover image: fixed height */}
         {user.coverImage && (
           <img
             src={user.coverImage}
@@ -59,7 +65,6 @@ export default function Dashboard() {
             }}
           />
         )}
-        {/* avatar: centered, half overlapping */}
         {user.avatar && (
           <img
             src={user.avatar}
@@ -79,11 +84,12 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* channel name */}
+      {/* Channel Name */}
       <div className="text-center mb-5">
         <h2>{user.fullname}</h2>
       </div>
 
+      {/* Dashboard Stats */}
       <h1 className="mb-4">Channel Dashboard</h1>
       <div className="row g-4 mb-5">
         <div className="col-sm-6 col-lg-3">
@@ -94,6 +100,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-sm-6 col-lg-3">
           <div className="card text-white bg-success h-100">
             <div className="card-body text-center">
@@ -102,6 +109,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-sm-6 col-lg-3">
           <div className="card text-white bg-warning h-100">
             <div className="card-body text-center">
@@ -110,6 +118,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
         <div className="col-sm-6 col-lg-3">
           <div className="card text-white bg-danger h-100">
             <div className="card-body text-center">
@@ -117,6 +126,18 @@ export default function Dashboard() {
               <p className="display-6">{stats.totalLikes}</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Enlarged “View My Videos” Button */}
+      <div className="row justify-content-center mb-5">
+        <div className="col-sm-6 col-lg-3">
+          <Link
+            to="/my-videos"
+            className="btn btn-outline-primary btn-lg w-100"
+          >
+            View My Videos
+          </Link>
         </div>
       </div>
 
