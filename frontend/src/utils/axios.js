@@ -1,18 +1,19 @@
 // src/utils/axios.js
+
 import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:7000/api/v1",
-  withCredentials: true, // send & receive HttpOnly cookies
+  withCredentials: true,
 });
 
-// A flag so we don’t infinite‑loop
+// Optional: automatic refresh‐token handling
 let isRefreshing = false;
 let failedQueue = [];
 
-const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
-    error ? prom.reject(error) : prom.resolve(token);
+const processQueue = (error) => {
+  failedQueue.forEach(({ reject, resolve }) => {
+    error ? reject(error) : resolve();
   });
   failedQueue = [];
 };
@@ -23,30 +24,29 @@ api.interceptors.response.use(
     const originalReq = err.config;
     if (
       err.response?.status === 401 &&
-      !originalReq._retry
+      !originalReq._retry &&
+      !originalReq.url.includes("/users/login") &&
+      !originalReq.url.includes("/users/refresh-token")
     ) {
       if (isRefreshing) {
-        // queue up additional failed requests until refresh finishes
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        })
-        .then(() => api(originalReq))
-        .catch((e) => Promise.reject(e));
+        }).then(() => api(originalReq));
       }
 
       originalReq._retry = true;
       isRefreshing = true;
 
-      // Call the refresh endpoint
       return new Promise((resolve, reject) => {
-        api.post("/users/refresh")
-          .then((res) => {
+        api
+          .post("/users/refresh-token")
+          .then(() => {
             processQueue(null);
             resolve(api(originalReq));
           })
-          .catch((refreshErr) => {
-            processQueue(refreshErr, null);
-            reject(refreshErr);
+          .catch((e) => {
+            processQueue(e);
+            reject(e);
           })
           .finally(() => {
             isRefreshing = false;

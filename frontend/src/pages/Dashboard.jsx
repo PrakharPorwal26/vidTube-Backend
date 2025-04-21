@@ -13,13 +13,12 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userRes  = await api.get("/users/current-user");
-        setUser(userRes.data.data);
-
-        const statsRes = await api.get("/dashboard/stats");
-        setStats(statsRes.data.data);
+        const u = await api.get("/users/current-user");
+        setUser(u.data.data);
+        const s = await api.get("/dashboard/stats");
+        setStats(s.data.data);
       } catch (err) {
-        console.error("❌ Dashboard load error:", err);
+        console.error(err);
         setError(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
@@ -28,41 +27,23 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const AVATAR_SIZE   = 120;  // px
-  const BANNER_HEIGHT = 200;  // px
+  const AVATAR = 120, BANNER = 200;
 
-  if (loading) {
-    return (
-      <div className="d-flex vh-100 justify-content-center align-items-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading…</span>
-        </div>
-      </div>
-    );
-  }
+  if (loading)
+    return <div className="d-flex vh-100 justify-content-center align-items-center"><div className="spinner-border text-primary" role="status"/><span className="visually-hidden">Loading…</span></div>;
 
-  if (error) {
-    return (
-      <div className="container py-5">
-        <div className="alert alert-danger">{error}</div>
-      </div>
-    );
-  }
+  if (error)
+    return <div className="container py-5"><div className="alert alert-danger">{error}</div></div>;
 
   return (
     <div className="container py-5">
-      {/* COVER IMAGE BANNER */}
-      <div style={{ position: "relative", marginBottom: AVATAR_SIZE / 2 }}>
+      <div style={{ position: "relative", marginBottom: AVATAR/2 }}>
         {user.coverImage && (
           <img
             src={user.coverImage}
             alt="Cover"
             className="img-fluid rounded-top"
-            style={{
-              width: "100%",
-              height: BANNER_HEIGHT,
-              objectFit: "cover",
-            }}
+            style={{ width: "100%", height: BANNER, objectFit: "cover" }}
           />
         )}
         {user.avatar && (
@@ -71,77 +52,44 @@ export default function Dashboard() {
             alt="Avatar"
             className="rounded-circle border border-white"
             style={{
-              width: AVATAR_SIZE,
-              height: AVATAR_SIZE,
+              width: AVATAR,
+              height: AVATAR,
               objectFit: "cover",
               position: "absolute",
               left: "50%",
               transform: "translateX(-50%)",
-              bottom: -(AVATAR_SIZE / 2),
+              bottom: -(AVATAR/2),
               background: "white",
             }}
           />
         )}
       </div>
 
-      {/* Channel Name */}
       <div className="text-center mb-5">
         <h2>{user.fullname}</h2>
       </div>
 
-      {/* Dashboard Stats */}
       <h1 className="mb-4">Channel Dashboard</h1>
       <div className="row g-4 mb-5">
-        <div className="col-sm-6 col-lg-3">
-          <div className="card text-white bg-primary h-100">
-            <div className="card-body text-center">
-              <h5 className="card-title">Total Videos</h5>
-              <p className="display-6">{stats.totalVideos}</p>
+        {[
+          { label: "Total Videos",   value: stats.totalVideos,      color: "primary" },
+          { label: "Total Views",    value: stats.totalViews,       color: "success" },
+          { label: "Subscribers",    value: stats.totalSubscribers, color: "warning" },
+          { label: "Total Likes",    value: stats.totalLikes,       color: "danger" },
+        ].map(({label,value,color}) => (
+          <div key={label} className="col-sm-6 col-lg-3">
+            <div className={`card text-white bg-${color} h-100`}>
+              <div className="card-body text-center">
+                <h5 className="card-title">{label}</h5>
+                <p className="display-6">{value}</p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="col-sm-6 col-lg-3">
-          <div className="card text-white bg-success h-100">
-            <div className="card-body text-center">
-              <h5 className="card-title">Total Views</h5>
-              <p className="display-6">{stats.totalViews}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-sm-6 col-lg-3">
-          <div className="card text-white bg-warning h-100">
-            <div className="card-body text-center">
-              <h5 className="card-title">Subscribers</h5>
-              <p className="display-6">{stats.totalSubscribers}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-sm-6 col-lg-3">
-          <div className="card text-white bg-danger h-100">
-            <div className="card-body text-center">
-              <h5 className="card-title">Total Likes</h5>
-              <p className="display-6">{stats.totalLikes}</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Enlarged “View My Videos” Button */}
-      <div className="row justify-content-center mb-5">
-        <div className="col-sm-6 col-lg-3">
-          <Link
-            to="/my-videos"
-            className="btn btn-outline-primary btn-lg w-100"
-          >
-            View My Videos
-          </Link>
-        </div>
-      </div>
 
-      <p className="text-muted">More features coming soon…</p>
+      {/* <p className="text-muted">More features coming soon…</p> */}
     </div>
   );
 }
