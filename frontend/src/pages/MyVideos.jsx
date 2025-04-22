@@ -51,7 +51,7 @@ export default function MyVideos() {
                 <div className="card-body">
                   <h5 className="card-title">{v.title}</h5>
                   <p className="card-text text-muted">
-                    {v.views} views •{" "}
+                    {/* {v.views} views •{" "} */}
                     {new Date(v.createdAt).toLocaleDateString()}
                   </p>
                 </div>

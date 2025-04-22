@@ -43,6 +43,21 @@ export default function Navbar() {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/liked">
+                Liked Videos
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/tweets">
+                Tweets
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/subscriptions" className="nav-link">
+                Subscriptions
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/upload">
                 Upload
               </NavLink>

@@ -19,6 +19,10 @@ import Playlists      from "./pages/Playlists";
 import CreatePlaylist from "./pages/CreatePlaylist";
 import PlaylistDetail from "./pages/PlaylistDetail";
 import EditVideo from "./pages/EditVideo.jsx";
+import LikedVideos from "./pages/LikedVideos.jsx";
+import Tweets         from "./pages/Tweets.jsx";
+import CreateTweet    from "./pages/CreateTweet.jsx";
+import Subscriptions  from "./pages/Subscriptions.jsx";
 
 export default function App() {
   return (
@@ -40,6 +44,10 @@ export default function App() {
         <Route path="/playlists/new"   element={<CreatePlaylist />} />
         <Route path="/playlists/:playlistId" element={<PlaylistDetail />} />
         <Route path="/videos/:videoId/edit" element={<EditVideo />} />
+        <Route path="/liked" element={<LikedVideos />} />
+        <Route path="/tweets" element={<Tweets />} />
+        <Route path="/tweets/new" element={<CreateTweet />} />
+        <Route path="/subscriptions" element={<Subscriptions/>} />
        </Routes>
     </Router>
   );

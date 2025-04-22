@@ -39,7 +39,7 @@ export default function Videos() {
                   <p className="card-text text-muted">
                     by <Link to={`/channel/${v.owner.username}`}>{v.owner.username}</Link>
                   </p>
-                  <p className="text-muted">{v.views} views</p>
+                  {/* <p className="text-muted">{v.views} views</p> */}
                 </div>
               </Link>
             </div>
