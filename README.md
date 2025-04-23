@@ -1,144 +1,209 @@
-# vidTube Backend
+# 📺 vidTube – Full Stack Project
 
-A robust, scalable, and well-documented backend API for a video-sharing platform inspired by YouTube. This project demonstrates advanced backend development skills including RESTful API design, authentication, data aggregation, and integration with third-party services like Cloudinary.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture Overview](#architecture-overview)
-- [Setup and Installation](#setup-and-installation)
-- [Environment Variables](#environment-variables)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Improvements and Future Work](#improvements-and-future-work)
-- [Contact](#contact)
+A complete full-stack video-sharing platform inspired by YouTube. Built with **Node.js**, **Express**, **MongoDB**, and **React**, it includes features like video upload, comments, playlists, likes, channel subscriptions, and JWT-based authentication.
 
 ---
 
-## Features
+## 🧩 Table of Contents
 
-- **User Authentication:** Secure JWT-based authentication, user registration, login, password management, and profile updates with image uploads via Cloudinary.
-- **Video Management:** Upload, update, delete, and toggle publish status of videos with metadata aggregation and Cloudinary integration.
-- **Comments:** Add, update, and delete comments on videos with proper error handling.
-- **Playlists:** Create, update, delete playlists and add or remove videos from playlists.
-- **Likes:** Toggle likes on videos, comments, and tweets; retrieve liked videos.
-- **Subscriptions:** Subscribe/unsubscribe to channels (users acting as channels) and view subscriber lists.
-- **Tweets:** Create, update, delete, and fetch tweets to mimic a microblogging feature.
-- **Dashboard Analytics:** Retrieve real-time channel statistics such as total video views, subscribers, total videos, and total likes.
-- **Healthcheck:** A simple route (`/api/v1/healthcheck`) to verify that the API is running as expected.
-- **RESTful API:** Comprehensive endpoints with consistent error handling and response formatting.
-- **Code Quality:** Modular, clean code structure organized into controllers, models, routes, middlewares, and utilities.
+- [✨ Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📁 Folder Structure](#-folder-structure)
+- [🚀 Setup and Installation](#-setup-and-installation)
+- [📦 Environment Variables](#-environment-variables)
+- [📡 API Overview](#-api-overview)
+- [📷 Screenshots](#-screenshots)
+- [📌 Future Improvements](#-future-improvements)
+- [📬 Contact](#-contact)
 
 ---
 
-## Tech Stack
+## ✨ Features
 
-- **Backend:** Node.js, Express
-- **Database:** MongoDB (using Mongoose ODM)
-- **Cloud Storage:** Cloudinary
-- **Authentication:** JWT (JSON Web Tokens)
-- **Testing:** Postman (with optional Jest or Mocha for automated testing)
-- **Other Tools:** ESLint, Prettier for code quality; Git & GitHub for version control
+### 🔐 Authentication
+- Register, Login, Logout, JWT-based token rotation
+- Upload avatar & cover image via **Cloudinary**
+
+### 🎥 Videos
+- Upload, edit, delete, toggle publish
+- Like/Unlike videos
+- View video details + comments
+
+### 💬 Comments
+- Add, edit, delete comments
+- Like/unlike comments
+
+### 📃 Playlists
+- Create/edit/delete playlists
+- Add/remove videos
+- View playlist details
+
+### 🔔 Subscriptions
+- Subscribe/unsubscribe to channels
+- View subscribers and subscribed channels
+
+### ❤️ Likes
+- Like/unlike videos and comments
+- View all liked videos
+
+### 📊 Dashboard
+- Get total videos, subscribers, likes, and subscribed channels
+
+### ✅ Extras
+- Tweets (basic microblogging)
+- Full SPA routing
 
 ---
 
-## Architecture Overview
+## 🛠️ Tech Stack
 
-The project is organized following best practices for scalable backend applications:
-
-- **`src/controllers/`** – Contains business logic for users, videos, comments, playlists, likes, subscriptions, tweets, dashboard, and healthcheck.
-- **`src/models/`** – Mongoose models defining schemas for Users, Videos, Comments, Playlists, Likes, Subscriptions, and Tweets.
-- **`src/routes/`** – Express routes mapping endpoints to corresponding controllers.
-- **`src/middlewares/`** – Custom middleware for authentication, error handling, file uploads, etc.
-- **`src/utils/`** – Utility functions and helpers like `ApiError`, `ApiResponse`, and async handler.
+| Layer       | Tech                                   |
+|-------------|----------------------------------------|
+| **Frontend**| React, React Router, Bootstrap, Axios  |
+| **Backend** | Node.js, Express.js, Mongoose          |
+| **Database**| MongoDB (Atlas)                        |
+| **Cloud**   | Cloudinary (video & image storage)     |
+| **Auth**    | JWT, HttpOnly cookies, refresh tokens  |
 
 ---
 
-## Setup and Installation
+## 📁 Folder Structure
+
+```bash
+vidTube/
+├── backend/             # Express backend
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── utils/
+│   ├── public/
+│   └── index.js, app.js
+├── frontend/            # React frontend
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── utils/axios.js
+│   └── public/
+├── .gitignore
+├── README.md
+└── package.json (both frontend & backend)
+```
+
+---
+
+## 🚀 Setup and Installation
 
 ### Prerequisites
+- Node.js v16+
+- MongoDB Atlas or Local MongoDB
+- Cloudinary account (free tier works)
 
-- [Node.js](https://nodejs.org/en/) (v14 or later)
-- [MongoDB](https://www.mongodb.com/) (local or [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
-- [Git](https://git-scm.com/)
+### 1. Clone the Repository
 
-### Installation Steps
+```bash
+git clone https://github.com/your-username/vidTube.git
+cd vidTube
+```
 
-1. **Clone the Repository:**
+### 2. Install Backend Dependencies
 
-   ```bash
-   git clone https://github.com/your-username/vidTube-backend.git
-   cd vidTube-backend
+```bash
+cd backend
+npm install
+```
 
-2. **Install Dependencies**
+### 3. Install Frontend Dependencies
 
-    npm install
+```bash
+cd ../frontend
+npm install
+```
 
-3. **Configure Enviornment Variables**
+### 4. Create Environment Files
 
-    configure env variables as listed in ".env.sample"
+- Copy and rename `.env.sample` to `.env` inside `/backend`
+- Set values for:
 
-4. **Run the application locally**
+```env
+PORT=7000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
 
-    npm start
+### 5. Run the App
 
-## API Documentation
+**Backend:**
 
-    Below is a summary of the available endpoints:
+```bash
+cd backend
+npm run dev
+```
 
-    Healthcheck:
-        GET /api/v1/healthcheck — Check if the API is running.
+**Frontend:**
 
-    User Routes: /api/v1/users
-        Register, login, refresh tokens, update user profile, update avatar/cover image, get current user details, etc.
+```bash
+cd frontend
+npm run dev
+```
 
-    Video Routes: /api/v1/videos
-        Upload (publish) videos, update video details, delete videos, and toggle video publish status.
+Frontend will be running at:  
+🔗 `http://localhost:5173`  
+Backend runs at:  
+🔗 `http://localhost:7000/api/v1`
 
-    Comment Routes: /api/v1/comments
-        Add, update, delete, and fetch comments for videos.
+---
 
-    Playlist Routes: /api/v1/playlists
-        Create, update, delete playlists; add/remove videos to/from playlists; get user playlists; get playlist by ID.
+## 📦 Environment Variables
 
-    Like Routes: /api/v1/likes
-        Toggle likes on videos, comments, and tweets; get all liked videos.
+Create a `.env` in `/backend`:
 
-    Subscription Routes: /api/v1/subscriptions
-        Toggle subscription to channels (users acting as channels); fetch channel subscriber list; get subscribed channels for a user.
+```
+PORT=7000
+MONGODB_URI=<your-mongodb-uri>
+JWT_SECRET=<jwt-secret>
+CLOUDINARY_CLOUD_NAME=<cloud-name>
+CLOUDINARY_API_KEY=<cloud-api-key>
+CLOUDINARY_API_SECRET=<cloud-api-secret>
+```
 
-    Tweet Routes: /api/v1/tweets
-        Create, update, delete, and fetch tweets.
+---
 
-    Dashboard Routes: /api/v1/dashboard
-        Get channel statistics (total videos, views, subscribers, likes) and list channel videos.
+## 📡 API Overview
 
-## Testing
+| Route | Description |
+|-------|-------------|
+| `/users`         | Register, Login, Refresh, Profile, Avatar, Cover |
+| `/videos`        | Upload, Fetch, Edit, Delete, Like, Toggle |
+| `/comments`      | Add/Edit/Delete Comments |
+| `/playlists`     | Create, Edit, Delete, Add/Remove Video |
+| `/likes`         | Toggle likes on videos/comments, Get liked videos |
+| `/subscriptions` | Toggle, Fetch Subscribers/Subscribed channels |
+| `/tweets`        | (Optional) Post/Edit/Delete Tweets |
+| `/dashboard`     | Get real-time channel analytics |
 
-**Postman Testing**
+---
 
-1. **Authentication**
 
-    - Use the login endpoint (/api/v1/users/login) to obtain a JWT token.
-    - For each request, add the header: Authorization: Bearer <token>.
+## 📌 Future Improvements
 
-2. **Endpoint Testing**
+- [ ] Real-time chat & notifications
+- [ ] Dark mode & accessibility support
+- [ ] Video monetization logic
+- [ ] Admin dashboard
+- [ ] Use WebSockets for comment/live updates
 
-    Use Postman to test endpoints across different modules, including:
-        - Healthcheck: GET /api/v1/healthcheck
-        - User registration & login, video management, comment functionality, playlist management, tweet CRUD, subscription toggling, and dashboard stats.
+---
 
-## Improvements and Future Work
+## 📬 Contact
 
-    - Frontend Integration: Consider developing a full-stack solution using React or another framework to enhance user interactivity.
-    - Advanced Testing: Implement comprehensive unit and integration tests.
-    - Performance Optimization: Add indexing, caching, and rate limiting as your usage grows.
-    - CI/CD: Set up continuous integration (e.g., GitHub Actions) for automated testing and deployment.
-    - Enhanced API Documentation: Integrate Swagger or similar tools for interactive API documentation.
+**Prakhar Porwal**  
+✉️ prakhar2001porwal@gmail.com  
+🌐 [LinkedIn](https://www.linkedin.com/in/prakharporwal)
 
-## Contact
+---
 
-    For any inquiries or suggestions, please reach out via prakhar2001porwal@gmail.com
+_Thanks for checking out **vidTube**! Feel free to ⭐ star the repo if you like it._
