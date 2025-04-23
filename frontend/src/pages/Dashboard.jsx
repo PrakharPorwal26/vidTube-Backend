@@ -52,14 +52,16 @@ export default function Dashboard() {
   return (
     <div className="container py-5">
       <div style={{ position: "relative", marginBottom: AVATAR / 2 }}>
-        {user.coverImage && (
-          <img
-            src={user.coverImage}
-            alt="Cover"
-            className="img-fluid rounded-top"
-            style={{ width: "100%", height: BANNER, objectFit: "cover" }}
-          />
-        )}
+        <div
+          className="img-fluid rounded-top w-100"
+          style={{
+            height: BANNER,
+            backgroundColor: "#e9ecef",
+            backgroundImage: user.coverImage ? `url(${user.coverImage})` : undefined,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
         {user.avatar && (
           <img
             src={user.avatar}
@@ -87,10 +89,9 @@ export default function Dashboard() {
       <div className="row g-4 mb-5">
         {[
           { label: "Total Videos", value: stats.totalVideos, color: "primary" },
-          // { label: "Total Views", value: stats.totalViews, color: "success" },
           { label: "Subscribers", value: stats.totalSubscribers, color: "warning" },
           { label: "Total Likes", value: stats.totalLikes, color: "danger" },
-          { label: "Subscribed Channels", value: subscriptions.length, color: "info" }
+          { label: "Subscribed Channels", value: subscriptions.length, color: "info" },
         ].map(({ label, value, color }) => (
           <div key={label} className="col-sm-6 col-lg-3">
             <div className={`card text-white bg-${color} h-100`}>
