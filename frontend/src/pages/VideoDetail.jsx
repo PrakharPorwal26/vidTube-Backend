@@ -141,6 +141,7 @@ export default function VideoDetail() {
       <video
         src={video.videoFile}
         controls
+        autoPlay
         className="w-100 mb-4"
         style={{ maxHeight: "480px" }}
       />

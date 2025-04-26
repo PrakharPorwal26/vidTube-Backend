@@ -136,7 +136,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Either email or username is required");
   }
 
-  if(!password?.trim()) {
+  if (!password?.trim()) {
     throw new ApiError(400, "Password is required");
   }
 
@@ -192,7 +192,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     req.cookies.refreshToken || req.body.refreshToken;
 
   if (!incomingRefreshToken) {
-    throw new ApiError(401, "Refresh token is required");
+    throw new ApiError(401, "Unauthorized, Please login to continue");
   }
 
   try {
@@ -407,7 +407,6 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  
 
   if (!channel?.length) {
     throw new ApiError(404, "Channel not found");

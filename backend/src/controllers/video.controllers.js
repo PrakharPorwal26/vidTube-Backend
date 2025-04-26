@@ -6,9 +6,22 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js";
 
+
 // GET /api/v1/videos
-// List videos with filtering, sorting, and pagination.
+/**
+ * Retrieves a paginated list of videos with optional filtering and sorting.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>} A JSON response containing the paginated list of videos.
+ * @throws {ApiError} If an error occurs during the database query.
+ */
 const getAllVideos = asyncHandler(async (req, res) => {
+
+  if (!req.user) {
+    throw new ApiError(401, "Unauthorized access");
+  }
+
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
 
   // Build filter
