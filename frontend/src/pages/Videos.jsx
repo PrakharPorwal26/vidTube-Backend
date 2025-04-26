@@ -9,7 +9,11 @@ export default function Videos() {
 
   useEffect(() => {
     api.get("/videos")
-      .then(res => setVideos(res.data.data.docs))
+      .then(res => {
+        // Filter only published videos
+        const publishedVideos = res.data.data.docs.filter(v => v.isPublished);
+        setVideos(publishedVideos);
+      })
       .catch(err => setError(err.response?.data?.message || err.message))
       .finally(() => setLoading(false));
   }, []);
@@ -39,7 +43,6 @@ export default function Videos() {
                   <p className="card-text text-muted">
                     by <Link to={`/channel/${v.owner.username}`}>{v.owner.username}</Link>
                   </p>
-                  {/* <p className="text-muted">{v.views} views</p> */}
                 </div>
               </Link>
             </div>
