@@ -4,19 +4,31 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-//CORS permissions: perimssion to all origins to access the API
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  })
-);
+app.set("trust proxy", 1);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    const isVercel = /\.vercel\.app$/.test(origin);
+    const isLocal  = origin.startsWith("http://localhost:");
+    return callback(isVercel || isLocal ? null : new Error("Not allowed"), true);
+  },
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
+};
+
+// 2️⃣ Enable CORS for all routes
+app.use(cors(corsOptions));
+
+// 3️⃣ Explicitly handle all OPTIONS preflight requests
+app.options("*", cors(corsOptions));
 
 //Common middlewares
+app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
-app.use(cookieParser());
 
 //import routes
 import healthcheckRouter from "./routes/healthcheck.routes.js";
