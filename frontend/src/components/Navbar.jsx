@@ -5,10 +5,10 @@ import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav className="navbar navbar-expand-lg bg-dark navbar-dark shadow-sm sticky-top">
       <div className="container">
-        <NavLink className="navbar-brand d-flex align-items-center" to="/">
-          {/* Logo (favicon) */}
+        {/* Logo and Brand */}
+        <NavLink className="navbar-brand d-flex align-items-center" to="/dashboard">
           <img
             src="/favicon.svg"
             alt="vidTube logo"
@@ -16,8 +16,10 @@ export default function Navbar() {
             height="30"
             className="me-2"
           />
-          vidTube
+          <span className="fw-bold">vidTube</span>
         </NavLink>
+
+        {/* Hamburger Toggler */}
         <button
           className="navbar-toggler"
           type="button"
@@ -30,58 +32,27 @@ export default function Navbar() {
           <span className="navbar-toggler-icon" />
         </button>
 
+        {/* Navigation Links */}
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/dashboard">
-                Dashboard
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/videos">
-                Videos
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/liked">
-                Liked Videos
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/tweets">
-                Tweets
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/subscriptions" className="nav-link">
-                Subscriptions
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/upload">
-                Upload
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/playlists">
-                Playlists
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/my-videos">
-                My Videos
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/history">
-                History
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/account">
-                Account
-              </NavLink>
-            </li>
+            {[
+              { label: "Dashboard", path: "/dashboard" },
+              { label: "Videos", path: "/videos" },
+              { label: "Liked Videos", path: "/liked" },
+              { label: "Tweets", path: "/tweets" },
+              { label: "Subscriptions", path: "/subscriptions" },
+              { label: "Upload", path: "/upload" },
+              { label: "Playlists", path: "/playlists" },
+              { label: "My Videos", path: "/my-videos" },
+              { label: "History", path: "/history" },
+              { label: "Account", path: "/account" },
+            ].map(({ label, path }) => (
+              <li key={label} className="nav-item">
+                <NavLink className="nav-link" to={path}>
+                  {label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

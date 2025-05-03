@@ -10,29 +10,25 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");              // clear old errors
+    setError(""); // clear old errors
     try {
       await api.post("/users/login", { email, password });
       navigate("/dashboard");
     } catch (err) {
-      // 1️⃣ Dump the entire error to the console:
       console.error("🔴 Login error full:", err);
-
-      // 2️⃣ Pull the server‑side message if present
       const serverMsg =
-        err.response?.data?.message   // ApiError message
-        || err.response?.data         // fallback if data is a string
-        || err.message                // generic axios error
-        || "Login failed";
-
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        "Login failed";
       setError(serverMsg);
     }
   };
 
   return (
-    <div className="d-flex vh-100 justify-content-center align-items-center bg-light">
-      <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow" style={{ width: "320px" }}>
-        <h2 className="mb-4 text-center">Login</h2>
+    <div className="auth-wrapper">
+      <form onSubmit={handleSubmit} className="auth-card">
+        <h2 className="mb-4 text-center text-danger">Login</h2>
         {error && <div className="alert alert-danger">{error}</div>}
         <div className="mb-3">
           <label className="form-label">Email</label>
@@ -54,7 +50,7 @@ export default function Login() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">
+        <button type="submit" className="btn btn-danger w-100">
           Login
         </button>
       </form>

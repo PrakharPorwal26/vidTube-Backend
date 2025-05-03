@@ -14,12 +14,10 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // handle text inputs
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  // handle file inputs
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (files.length) {
@@ -32,7 +30,6 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-    // avatar is required
     if (!avatar) {
       setError("Avatar is required");
       return;
@@ -54,21 +51,15 @@ export default function Register() {
     } catch (err) {
       console.error("🛑 Registration error:", err.response || err);
       const msg =
-        err.response?.data?.message ??
-        err.message ??
-        "Registration failed";
+        err.response?.data?.message ?? err.message ?? "Registration failed";
       setError(msg);
     }
   };
 
   return (
-    <div className="d-flex vh-100 justify-content-center align-items-center bg-light">
-      <form
-        onSubmit={handleSubmit}
-        className="p-4 bg-white rounded shadow"
-        style={{ width: "360px" }}
-      >
-        <h2 className="mb-4 text-center">Register</h2>
+    <div className="auth-wrapper">
+      <form onSubmit={handleSubmit} className="auth-card">
+        <h2 className="mb-4 text-center text-success">Register</h2>
         {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="mb-3">
@@ -120,7 +111,7 @@ export default function Register() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Avatar (required)</label>
+          <label className="form-label">Avatar <span className="text-danger">(required)</span></label>
           <input
             name="avatar"
             type="file"

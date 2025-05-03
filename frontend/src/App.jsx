@@ -1,7 +1,7 @@
 // src/App.jsx
 
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 import Home           from "./pages/Home";
@@ -18,24 +18,29 @@ import VideoDetail    from "./pages/VideoDetail";
 import Playlists      from "./pages/Playlists";
 import CreatePlaylist from "./pages/CreatePlaylist";
 import PlaylistDetail from "./pages/PlaylistDetail";
-import EditVideo from "./pages/EditVideo.jsx";
-import LikedVideos from "./pages/LikedVideos.jsx";
+import EditVideo      from "./pages/EditVideo.jsx";
+import LikedVideos    from "./pages/LikedVideos.jsx";
 import Tweets         from "./pages/Tweets.jsx";
 import CreateTweet    from "./pages/CreateTweet.jsx";
 import Subscriptions  from "./pages/Subscriptions.jsx";
 
-export default function App() {
+function AppRoutes() {
+  const location = useLocation();
+  const hideNavbarOnPaths = ["/", "/login", "/register"];
+
+  const shouldHideNavbar = hideNavbarOnPaths.includes(location.pathname);
+
   return (
-    <Router>
-      <Navbar />
+    <>
+      {!shouldHideNavbar && <Navbar />}
       <Routes>
         <Route path="/"                 element={<Home />} />
-        <Route path="/login"            element={<Login />} />
-        <Route path="/register"         element={<Register />} />
-        <Route path="/dashboard"        element={<Dashboard />} />
-        <Route path="/my-videos"        element={<MyVideos />} />
-        <Route path="/account"          element={<Account />} />
-        <Route path="/history"          element={<WatchHistory />} />
+        <Route path="/login"           element={<Login />} />
+        <Route path="/register"        element={<Register />} />
+        <Route path="/dashboard"       element={<Dashboard />} />
+        <Route path="/my-videos"       element={<MyVideos />} />
+        <Route path="/account"         element={<Account />} />
+        <Route path="/history"         element={<WatchHistory />} />
         <Route path="/channel/:username" element={<ChannelProfile />} />
         <Route path="/videos"          element={<Videos />} />
         <Route path="/upload"          element={<UploadVideo />} />
@@ -44,11 +49,19 @@ export default function App() {
         <Route path="/playlists/new"   element={<CreatePlaylist />} />
         <Route path="/playlists/:playlistId" element={<PlaylistDetail />} />
         <Route path="/videos/:videoId/edit" element={<EditVideo />} />
-        <Route path="/liked" element={<LikedVideos />} />
-        <Route path="/tweets" element={<Tweets />} />
-        <Route path="/tweets/new" element={<CreateTweet />} />
-        <Route path="/subscriptions" element={<Subscriptions/>} />
-       </Routes>
+        <Route path="/liked"           element={<LikedVideos />} />
+        <Route path="/tweets"          element={<Tweets />} />
+        <Route path="/tweets/new"      element={<CreateTweet />} />
+        <Route path="/subscriptions"   element={<Subscriptions />} />
+      </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppRoutes />
     </Router>
   );
 }
