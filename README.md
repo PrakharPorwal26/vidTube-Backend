@@ -202,7 +202,7 @@ CLOUDINARY_API_SECRET=<cloud-api-secret>
 
 **Prakhar Porwal**  
 ✉️ prakhar2001porwal@gmail.com  
-🌐 [LinkedIn](https://www.linkedin.com/in/prakharporwal)
+🌐 [LinkedIn](https://www.linkedin.com/in/prakhar-porwal-a7989b215/)
 
 ---
 
