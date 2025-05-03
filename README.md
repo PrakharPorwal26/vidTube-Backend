@@ -12,7 +12,6 @@ A complete full-stack video-sharing platform inspired by YouTube. Built with **N
 - [🚀 Setup and Installation](#-setup-and-installation)
 - [📦 Environment Variables](#-environment-variables)
 - [📡 API Overview](#-api-overview)
-- [📷 Screenshots](#-screenshots)
 - [📌 Future Improvements](#-future-improvements)
 - [📬 Contact](#-contact)
 
