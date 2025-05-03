@@ -14,7 +14,7 @@ const corsOptions = {
     return callback(isVercel || isLocal ? null : new Error("Not allowed"), true);
   },
   credentials: true,
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
   allowedHeaders: ["Content-Type","Authorization"]
 };
 
