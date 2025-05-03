@@ -26,7 +26,7 @@ export default function VideoDetail() {
   const [editingId, setEditingId]           = useState(null);
   const [editingContent, setEditingContent] = useState("");
 
-  // 1️⃣ Load video, comments, user, and initialize commentLiked
+  // 1️⃣ Load video, comments, user, and liked-videos
   useEffect(() => {
     const load = async () => {
       try {
@@ -36,22 +36,19 @@ export default function VideoDetail() {
           api.get("/users/current-user"),
           api.get("/likes/videos"),
         ]);
-  
+
         const videoData = vRes.data.data;
-        const userData = uRes.data.data;
+        const userData  = uRes.data.data;
         const likedList = likedRes.data.data || [];
-  
+
         setVideo(videoData);
         setUser(userData);
         setComments(cRes.data.data.docs || []);
-  
-        // Safely check if current video is liked
-        if (videoData && videoData._id && userData && userData._id) {
-          setIsLiked(likedList.some(v => v && v._id === videoData._id));
-        } else {
-          setIsLiked(false);
-        }
-  
+        setIsLiked(
+          videoData && userData
+            ? likedList.some(v => v && v._id === videoData._id)
+            : false
+        );
       } catch (err) {
         console.error(err);
         setError("Failed to load video or comments.");
@@ -61,6 +58,7 @@ export default function VideoDetail() {
     };
     load();
   }, [videoId]);
+
   if (loading) return <p className="text-center mt-5">Loading…</p>;
   if (error)   return <div className="alert alert-danger">{error}</div>;
   if (!video)  return <p className="text-center mt-5">Video not found.</p>;
@@ -71,7 +69,7 @@ export default function VideoDetail() {
   const toggleVideoLike = async () => {
     try {
       await api.post(`/likes/toggle/v/${videoId}`);
-      setIsLiked((prev) => !prev);
+      setIsLiked(prev => !prev);
     } catch (e) {
       console.error("Failed to toggle video like:", e);
     }
@@ -81,10 +79,7 @@ export default function VideoDetail() {
   const toggleCommentLike = async (commentId) => {
     try {
       await api.post(`/likes/toggle/c/${commentId}`);
-      setCommentLiked((prev) => ({
-        ...prev,
-        [commentId]: !prev[commentId],
-      }));
+      setCommentLiked(prev => ({ ...prev, [commentId]: !prev[commentId] }));
     } catch (e) {
       console.error("Failed to toggle comment like:", e);
     }
@@ -97,6 +92,7 @@ export default function VideoDetail() {
       const res = await api.post(`/comments/${videoId}`, {
         content: newComment.trim(),
       });
+      // attach current user as owner
       setComments([{ ...res.data.data, owner: user }, ...comments]);
       setNewComment("");
     } catch {
@@ -111,11 +107,13 @@ export default function VideoDetail() {
       const res = await api.patch(`/comments/c/${editingId}`, {
         content: editingContent.trim(),
       });
-      setComments(
-        comments.map((c) =>
-          c._id === editingId ? res.data.data : c
-        )
-      );
+      const updated = res.data.data;
+      // preserve original owner
+      setComments(comments.map(c =>
+        c._id === editingId
+          ? { ...updated, owner: c.owner }
+          : c
+      ));
       setEditingId(null);
       setEditingContent("");
     } catch {
@@ -123,12 +121,12 @@ export default function VideoDetail() {
     }
   };
 
-  // 🗑️ Delete a comment (only by owner)
+  // 🗑️ Delete a comment
   const onDelete = async (id) => {
     if (!window.confirm("Delete this comment?")) return;
     try {
       await api.delete(`/comments/c/${id}`);
-      setComments(comments.filter((c) => c._id !== id));
+      setComments(comments.filter(c => c._id !== id));
     } catch {
       setError("Failed to delete comment.");
     }
@@ -159,23 +157,17 @@ export default function VideoDetail() {
               style={{ objectFit: "cover" }}
             />
           )}
-          <Link
-            to={`/channel/${video.owner.username}`}
-            className="fw-bold"
-          >
+          <Link to={`/channel/${video.owner.username}`} className="fw-bold">
             {video.owner.username}
           </Link>
         </div>
         <div>
           <button
-            className={`btn me-2 ${
-              isLiked ? "btn-danger" : "btn-outline-primary"
-            }`}
+            className={`btn me-2 ${isLiked ? "btn-danger" : "btn-outline-primary"}`}
             onClick={toggleVideoLike}
           >
             {isLiked ? "Unlike" : "Like"}
           </button>
-
           {isVideoOwner && (
             <>
               <button
@@ -203,25 +195,22 @@ export default function VideoDetail() {
       <div className="mb-5">
         <h4>Comments</h4>
 
-        {/* Add new comment */}
+        {/* New comment */}
         <div className="mb-3">
           <textarea
             className="form-control"
             rows={2}
             placeholder="Add a comment..."
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={e => setNewComment(e.target.value)}
           />
-          <button
-            className="btn btn-primary mt-2"
-            onClick={postComment}
-          >
+          <button className="btn btn-primary mt-2" onClick={postComment}>
             Post Comment
           </button>
         </div>
 
-        {/* List existing comments */}
-        {comments.map((c) => {
+        {/* List comments */}
+        {comments.map(c => {
           const isOwner = user._id === c.owner._id.toString();
           const liked   = !!commentLiked[c._id];
 
@@ -276,20 +265,12 @@ export default function VideoDetail() {
                     className="form-control mb-2"
                     rows={2}
                     value={editingContent}
-                    onChange={(e) =>
-                      setEditingContent(e.target.value)
-                    }
+                    onChange={e => setEditingContent(e.target.value)}
                   />
-                  <button
-                    className="btn btn-sm btn-success me-2"
-                    onClick={saveEdit}
-                  >
+                  <button className="btn btn-sm btn-success me-2" onClick={saveEdit}>
                     Save
                   </button>
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={() => setEditingId(null)}
-                  >
+                  <button className="btn btn-sm btn-secondary" onClick={() => setEditingId(null)}>
                     Cancel
                   </button>
                 </>
