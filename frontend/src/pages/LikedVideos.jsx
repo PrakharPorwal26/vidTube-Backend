@@ -3,15 +3,14 @@ import { Link } from "react-router-dom";
 import api from "../utils/axios";
 
 export default function LikedVideos() {
-  const [videos, setVideos]   = useState([]);
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     api
       .get("/likes/videos")
       .then(res => {
-        // Ensure it's an array
         setVideos(Array.isArray(res.data.data) ? res.data.data : []);
       })
       .catch(err => {
@@ -21,37 +20,37 @@ export default function LikedVideos() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center mt-5">Loading liked videos…</p>;
-  if (error)   return <div className="alert alert-danger">{error}</div>;
+  if (loading) return <p className="text-center text-light mt-5">Loading liked videos…</p>;
+  if (error) return <div className="alert alert-danger mt-5">{error}</div>;
   if (!videos.length)
-    return <p className="text-center mt-5">You haven’t liked any videos yet.</p>;
+    return <p className="text-center text-light mt-5">You haven’t liked any videos yet.</p>;
 
   return (
-    <div className="container py-5">
-      <h1 className="mb-4">Liked Videos</h1>
-      <div className="row g-4">
-        {videos.map(v =>
-          v && v._id ? (
-            <div key={v._id} className="col-sm-6 col-lg-4">
-              <Link to={`/videos/${v._id}`} className="text-decoration-none">
-                <div className="card h-100">
-                  <img
-                    src={v.thumbnail}
-                    alt={v.title}
-                    className="card-img-top"
-                    style={{ objectFit: "cover", height: "180px" }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{v.title}</h5>
-                    {/* <p className="card-text text-muted">
-                      {v.views} views
-                    </p> */}
+    <div className="dashboard-page py-5">
+      <div className="container">
+        <h1 className="mb-4 text-light">Liked Videos</h1>
+        <div className="row g-4">
+          {videos.map(v =>
+            v && v._id ? (
+              <div key={v._id} className="col-sm-6 col-lg-4">
+                <Link to={`/videos/${v._id}`} className="text-decoration-none text-light">
+                  <div className="card bg-dash h-100 p-2">
+                    <img
+                      src={v.thumbnail}
+                      alt={v.title}
+                      className="card-img-top rounded"
+                      style={{ objectFit: "cover", height: "180px" }}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{v.title}</h5>
+                      {/* <p className="card-text text-muted">{v.views} views</p> */}
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-          ) : null
-        )}
+                </Link>
+              </div>
+            ) : null
+          )}
+        </div>
       </div>
     </div>
   );

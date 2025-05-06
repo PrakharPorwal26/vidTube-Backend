@@ -244,4 +244,37 @@ body {
     margin-bottom: 0.5rem;
   }
 
-  
+  /* Card style for video listing */
+.video-card {
+  background: #2a2a2a;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(255, 60, 56, 0.2);
+}
+
+.card-img-wrapper {
+  position: relative;
+  background: #1e1e1e;
+}
+
+.video-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.video-card .card-text {
+  color: #ccc;
+}
+
+.bg-dash {
+  background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+  color: #f1f1f1;
+}
